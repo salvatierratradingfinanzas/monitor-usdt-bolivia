@@ -1,7 +1,7 @@
 name: Bot-USDT
 on:
   schedule:
-    - cron: '0 * * * *'  # <--- ESTE ES EL DESPERTADOR (Cada hora)
+    - cron: '*/30 * * * *'  # <--- ESTE ES EL DESPERTADOR (Cada hora)
   workflow_dispatch:      # <--- ESTE ES EL BOTÓN MANUAL (Para pruebas)
 jobs:
   build:
