@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor USDT - Hexx</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50">
+
+    <div class="max-w-7xl mx-auto px-4 mt-6">
+        <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h4 class="text-gray-800 font-bold text-lg flex items-center gap-2">
+                        <span class="text-blue-600">📊</span> Histórico de la Semana
+                    </h4>
+                    <p class="text-gray-500 text-xs font-medium">Tendencia del USDT/BOB</p>
+                </div>
+                <div id="hexx-chart-comment" class="text-[10px] bg-blue-50 text-blue-600 px-3 py-1 rounded-full border border-blue-100 font-bold uppercase">
+                    HEXX: "Cargando datos..."
+                </div>
+            </div>
+            
+            <div class="relative h-64 w-full">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadChart() {
+            try {
+                // 1. Leemos tu archivo data.json
+                const response = await fetch('data.json');
+                const data = await response.json();
+
+                // 2. Extraemos etiquetas (fechas) y valores (precios)
+                const labels = data.map(item => item.fecha.split(' ')[1]); // Solo mostramos la hora para que no se vea amontonado
+                const prices = data.map(item => item.precio);
+                
+                // 3. Lógica de Hexx: Comentario dinámico
+                const ultimoPrecio = prices[prices.length - 1];
+                const penultimoPrecio = prices[prices.length - 2] || ultimoPrecio;
+                const comentario = document.getElementById('hexx-chart-comment');
+                
+                if (ultimoPrecio > penultimoPrecio) {
+                    comentario.innerText = `HEXX: "El precio subió a Bs. ${ultimoPrecio}. ¡Atento!"`;
+                    comentario.classList.replace('text-blue-600', 'text-red-600');
+                } else if (ultimoPrecio < penultimoPrecio) {
+                    comentario.innerText = `HEXX: "Bajada a Bs. ${ultimoPrecio}. ¿Momento de compra?"`;
+                    comentario.classList.replace('text-blue-600', 'text-green-600');
+                } else {
+                    comentario.innerText = `HEXX: "Precio estable en Bs. ${ultimoPrecio}"`;
+                }
+
+                // 4. Configuramos la gráfica
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Precio USDT',
+                            data: prices,
+                            borderColor: '#2563eb', // Azul moderno
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4, // Esto hace que la línea sea curva y elegante
+                            pointRadius: 4,
+                            pointBackgroundColor: '#2563eb'
+                        }]
+                    },
+                    options: {
+                        responsive: True,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: false, grid: { display: false } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error cargando datos:", error);
+                document.getElementById('hexx-chart-comment').innerText = 'HEXX: "Error al leer datos"';
+            }
+        }
+
+        loadChart();
+    </script>
+</body>
+</html>
