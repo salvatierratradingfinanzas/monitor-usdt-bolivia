@@ -24,8 +24,7 @@ jobs:
 
       - name: Ejecutar script de Hexx
         run: python bot.py
-
-    - name: Guardar cambios en el repo
+      - name: Guardar cambios en el repo
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
