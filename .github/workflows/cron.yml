@@ -26,7 +26,7 @@ jobs:
       - name: Guardar cambios en el repo
         run: |
           git config --global user.name 'Hexx-Bot'
-          git config --global user.email 'bot@hexx.com'
+          git config --global user.email 'salvatierra.tradingfinanzas@gmail.com'
           git add data.json
           git commit -m "Actualización automática de precio" || exit 0
           git push
