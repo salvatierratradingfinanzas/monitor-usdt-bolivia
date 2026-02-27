@@ -17,13 +17,25 @@ jobs:
         
       - name: Ejecutar Bot
         run: python bot.py
-      - name: Guardar en GitHub
+
+
+      - name: Ejecutar Bot
+        run: python bot.py
+
+      - name: Forzar Guardado Total
         run: |
           git config --global user.name 'Hexx-Bot'
           git config --global user.email 'bot@hexx.com'
+          
+          # Truco: tocamos el archivo para actualizar su fecha de modificación
+          touch data.json 
+          
           git add data.json
-          git commit -m "update" || exit 0
-          git push origin main   
+          
+          # Forzamos el commit con la fecha y hora para que siempre sea único
+          git commit -m "Registro Hexx: $(date +'%Y-%m-%d %H:%M:%S')" || echo "No hay cambios, pero forzamos"
+          git push origin main  
+  
 
 
 
