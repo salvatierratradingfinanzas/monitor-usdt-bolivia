@@ -85,8 +85,8 @@ import os
 from datetime import datetime, timedelta
 
 def obtener_precio():
-    url = "TU_URL_DE_LA_API_AQUI" # Pon tu URL real aquí
-    
+    url = "https://criptoya.com/api/binancep2p/usdt/bob/1"
+        
     try:
         response = requests.get(url)
         data = response.json()
