@@ -81,6 +81,8 @@
 
 
 import requests
+import json
+from datetime import datetime, timedelta
 
 
 
@@ -126,8 +128,6 @@ if dato_obtenido:
 
 
 
-import json
-from datetime import datetime, timedelta
 
 def obtener_precio():
     # 1. Definimos la URL de la API (Binance u otra)
