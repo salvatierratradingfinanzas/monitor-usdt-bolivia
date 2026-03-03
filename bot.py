@@ -81,6 +81,51 @@
 
 
 import requests
+
+
+
+def obtener_precio_usdt_bolivia():
+    # 1. Definimos la URL de la API (CriptoYa es excelente para esto)
+    # Buscamos el exchange 'binancep2p' para la moneda 'usdt' en Bolivia 'bob'
+    url = "https://criptoya.com/api/binancep2p/usdt/bob/1"
+
+    try:
+        # 2. Hacemos la petición a la API
+        response = requests.get(url)
+        datos = response.json()
+
+        # 3. Extraemos el precio de "puntas" (el promedio de compra/venta)
+        # Usamos 'ask' que es el precio al que la gente está vendiendo
+        precio = datos['ask']
+        
+        # 4. Obtenemos la fecha y hora actual
+        fecha_actual = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # 5. Creamos el objeto de datos que guardaremos
+        registro = {
+            "fecha": fecha_actual,
+            "precio": precio,
+            "moneda": "BOB",
+            "fuente": "Binance P2P via CriptoYa"
+        }
+
+        print(f"✅ Hexx ha capturado el precio: {precio} BOB a las {fecha_actual}")
+        return registro
+
+    except Exception as e:
+        print(f"❌ Error al capturar datos: {e}")
+        return None
+
+# Ejecutamos la función
+dato_obtenido = obtener_precio_usdt_bolivia()
+
+# 6. Simulación de guardado (Aquí podrías mandarlo a una DB o Google Sheets)
+if dato_obtenido:
+    with open("precios_historial.json", "a") as archivo:
+        archivo.write(json.dumps(dato_obtenido) + "\n")
+
+
+
 import json
 from datetime import datetime, timedelta
 
@@ -135,54 +180,4 @@ def obtener_precio():
 if __name__ == "__main__":
     obtener_precio()
 
-# import requests
-# import json
-# import os
-# from datetime import datetime, timedelta
 
-# def obtener_precio():
-#     url = "https://criptoya.com/api/binancep2p/usdt/bob/1"
-        
-#     try:
-#         response = requests.get(url)
-#         data = response.json()
-        
-#         # Ajusta esto según cómo responde tu API (ej: data['price'])
-#         precio = float(data['price']) 
-        
-#         # Hora de Bolivia
-#         hora_bolivia = datetime.utcnow() + timedelta(hours=-4)
-#         fecha_formateada = hora_bolivia.strftime('%Y-%m-%d %H:%M')
-
-#         # --- AQUÍ ESTÁ EL TRUCO PARA GITHUB ---
-#         archivo_nombre = 'data.json'
-        
-#         # 1. Leer datos existentes
-#         if os.path.exists(archivo_nombre):
-#             with open(archivo_nombre, 'r') as f:
-#                 try:
-#                     historial = json.load(f)
-#                     if not isinstance(historial, list): # Si el archivo no es una lista, lo reseteamos
-#                         historial = []
-#                 except:
-#                     historial = []
-#         else:
-#             historial = []
-
-#         # 2. Añadir nuevo registro
-#         nuevo_registro = {"fecha": fecha_formateada, "precio": precio}
-#         historial.append(nuevo_registro)
-
-#         # 3. GUARDAR (Forzamos la escritura física en el archivo)
-#         with open(archivo_nombre, 'w') as f:
-#             json.dump(historial, f, indent=4)
-#             f.flush() # Asegura que se escriba al disco
-#             os.fsync(f.fileno()) # Obliga al sistema operativo a guardar ya mismo
-            
-#         print(f"Guardado exitoso: {fecha_formateada} - {precio}")
-
-#     except Exception as e:
-#         print(f"Error en el bot: {e}")
-
-# if __name__ == "__main__":
-#     obtener_precio()
