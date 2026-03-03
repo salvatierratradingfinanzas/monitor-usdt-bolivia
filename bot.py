@@ -94,7 +94,7 @@ def obtener_precio_usdt_bolivia():
     try:
         # 2. Hacemos la petición a la API
         response = requests.get(url)
-        datos = response.json()
+        datos = data.json()
 
         # 3. Extraemos el precio de "puntas" (el promedio de compra/venta)
         # Usamos 'ask' que es el precio al que la gente está vendiendo
