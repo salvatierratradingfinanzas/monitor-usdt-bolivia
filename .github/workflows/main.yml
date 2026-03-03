@@ -1,7 +1,7 @@
 name: Bot-USDT
 on:
   schedule:
-    - cron: '*/30 * * * *'  # <--- ESTE ES EL DESPERTADOR (Cada hora)
+    - cron: '*/30 * * * *'  # <--- ESTE ES EL DESPERTADOR (Cada media hora)
   workflow_dispatch:      # <--- ESTE ES EL BOTÓN MANUAL (Para pruebas)
 jobs:
   build:
@@ -15,10 +15,6 @@ jobs:
           python-version: '3.9'
       - run: pip install requests
         
-      - name: Ejecutar Bot
-        run: python bot.py
-
-
       - name: Ejecutar Bot
         run: python bot.py
 
