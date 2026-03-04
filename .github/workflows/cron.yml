@@ -16,10 +16,10 @@ jobs:
           python-version: '3.9'
       - run: pip install requests
       - run: python bot.py
-      - name: Forzar Guardado
+      - name: Forzar Guardado Total
         run: |
-          git config --global user.name 'Hexx-Bot'
-          git config --global user.email 'bot@hexx.com'
-          git add data.json
-          git commit -m "Registro Hexx: $(date)" || exit 0
-          git push origin main
+                git config --global user.name 'Hexx-Bot'
+                git config --global user.email 'bot@hexx.com'
+                git add data.json  # Asegúrate de que el nombre coincide exactamente
+                git commit -m "Registro Hexx: $(date +'%Y-%m-%d %H:%M:%S')" || echo "Nada nuevo para guardar"
+                git push origin main
