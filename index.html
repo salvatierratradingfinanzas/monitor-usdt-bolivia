@@ -37,7 +37,10 @@
                 const data = await response.json();
 
                 // 2. Extraemos etiquetas (fechas) y valores (precios)
-                const labels = data.map(item => item.fecha.split(' ')[1]); // Solo mostramos la hora para que no se vea amontonado
+                // const labels = data.map(item => item.fecha.split(' ')[1]); // Solo mostramos la hora para que no se vea amontonado
+                const labels = data.map(item => {    return item.fecha.substring(5, 16)});
+    // Si la fecha es "2026-03-15 01:05", esto devuelve "03-15 01:05"
+    
                 const prices = data.map(item => item.precio);
                 
                 // 3. Lógica de Hexx: Comentario dinámico
@@ -83,7 +86,23 @@
                         }
                     }
                 });
+                    options: {
+                        // ... tu configuración actual
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: {
+                                    maxRotation: 45, // Inclina las etiquetas para que no se amontonen
+                                    minRotation: 45,
+                                    autoSkip: true,   // Salta etiquetas automáticamente si hay muchas
+                                    maxTicksLimit: 10 // Muestra máximo 10 etiquetas a la vez
+                                }
+                            },
+                            y: { /* ... */ }
+                        }
+                    }
 
+                
             } catch (error) {
                 console.error("Error cargando datos:", error);
                 document.getElementById('hexx-chart-comment').innerText = 'HEXX: "Error al leer datos"';
